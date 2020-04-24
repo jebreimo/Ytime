@@ -6,12 +6,14 @@
 # License text is included with the source distribution.
 # ===========================================================================
 cmake_minimum_required(VERSION 3.15)
-project(utc2gnss)
+project(utc2gnss VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
 add_library(Ytime STATIC
     include/Ytime/Constants.hpp
+    include/Ytime/DateTimeDelta.cpp
+    include/Ytime/DateTimeDelta.hpp
     include/Ytime/DateTime.hpp
     include/Ytime/LeapSeconds.hpp
     include/Ytime/PackedDateTime.hpp

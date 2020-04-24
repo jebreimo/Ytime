@@ -14,6 +14,7 @@
 #include <string>
 #include <utility>
 #include "DateTime.hpp"
+#include "DateTimeDelta.hpp"
 #include "YtimeException.hpp"
 
 /** @file This file defines a memory efficient representation of
@@ -41,5 +42,7 @@ namespace Ytime
 
     DateTime unpack(PackedDateTime dateTime);
 
-    Delta getDeltaDays(PackedDateTime from, PackedDateTime to);
+    DateTimeDelta getDateTimeDelta(PackedDateTime from, PackedDateTime to);
+
+    PackedDateTime add(PackedDateTime from, DateTimeDelta delta);
 }

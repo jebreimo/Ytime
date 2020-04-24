@@ -35,7 +35,7 @@ namespace Ytime
         return {toYMD(dayUsecs.first), toHMS(dayUsecs.second)};
     }
 
-    Delta getDeltaDays(PackedDateTime from, PackedDateTime to)
+    DateTimeDelta getDateTimeDelta(PackedDateTime from, PackedDateTime to)
     {
         if (from == to)
             return {};
@@ -69,6 +69,28 @@ namespace Ytime
                 usecs = -int64_t(USECS_PER_DAY);
             }
         }
-        return {Days(days), Useconds(usecs)};
+        return {days, usecs};
+    }
+
+    PackedDateTime add(PackedDateTime from, DateTimeDelta delta)
+    {
+        if (delta.days() == 0)
+            return PackedDateTime(from + delta.totalUseconds());
+
+        if (isLeapSecond(from))
+            YTIME_THROW("Can not count days from a leap second.");
+        auto to = from + delta.days() * int64_t(USECS_PER_DAY);
+        auto toLS = int64_t(getLeapSeconds(PackedDateTime(to)));
+        auto fromLS = int64_t(getLeapSeconds(from));
+        to += (toLS - fromLS) * int64_t(USECS_PER_SEC);
+        if (isLeapSecond(PackedDateTime(to)))
+        {
+            if (delta.days() > 0)
+                to += USECS_PER_SEC;
+            else
+                to -= USECS_PER_SEC;
+        }
+        to += delta.totalUseconds();
+        return PackedDateTime(to);
     }
 }

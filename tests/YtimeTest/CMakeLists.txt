@@ -20,7 +20,7 @@ endif ()
 
 add_executable(YtimeTest
     YtimeTestMain.cpp
-    Test_DeltaDays.cpp Test_LeapSeconds.cpp)
+    Test_getDateTimeDelta.cpp Test_LeapSeconds.cpp Test_addDateTimeDelta.cpp)
 
 target_link_libraries(YtimeTest
     PRIVATE

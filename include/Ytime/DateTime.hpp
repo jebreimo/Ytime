@@ -109,61 +109,6 @@ namespace Ytime
 
     std::ostream& operator<<(std::ostream& os, const DateTime& dt);
 
-    enum Days : int64_t;
-    enum Seconds : int64_t;
-    enum Useconds : int64_t;
-
-    class Delta
-    {
-    public:
-        constexpr Delta() noexcept
-            : m_Days(), m_Useconds()
-        {}
-
-        constexpr Delta(Days days, Useconds totalUsecs) noexcept
-            : m_Days(days), m_Useconds(totalUsecs)
-        {}
-
-        constexpr Delta(Days days, Seconds secs) noexcept
-            : m_Days(days), m_Useconds(Useconds(secs * USECS_PER_SEC))
-        {}
-
-        constexpr Delta(Days days, Seconds secs, Useconds usecs) noexcept
-            : m_Days(days),
-              m_Useconds(Useconds(secs * USECS_PER_SEC + usecs))
-        {}
-
-        constexpr Days days() const noexcept
-        {
-            return Days(m_Days);
-        }
-
-        constexpr Seconds seconds() const noexcept
-        {
-            return Seconds(m_Useconds / int64_t(USECS_PER_SEC));
-        }
-
-        constexpr Useconds useconds() const noexcept
-        {
-            return Useconds(m_Useconds - seconds() * int64_t(USECS_PER_SEC));
-        }
-
-        constexpr Useconds totalUseconds() const noexcept
-        {
-            return Useconds(m_Useconds);
-        }
-
-    private:
-        Days m_Days;
-        Useconds m_Useconds;
-    };
-
-    bool operator==(const Delta& a, const Delta& b) noexcept;
-
-    bool operator!=(const Delta& a, const Delta& b) noexcept;
-
-    std::ostream& operator<<(std::ostream& os, const Delta& d);
-
     std::optional<YearMonthDay> parseYMD(std::string_view str);
 
     std::optional<HourMinuteSecond> parseHMS(std::string_view str);

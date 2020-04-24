@@ -254,30 +254,6 @@ namespace Ytime
         return os << dt.date << "T" << dt.time;
     }
 
-    bool operator==(const Delta& a, const Delta& b) noexcept
-    {
-        return a.days() == b.days() && a.totalUseconds() == b.totalUseconds();
-    }
-
-    bool operator!=(const Delta& a, const Delta& b) noexcept
-    {
-        return !(a == b);
-    }
-
-    std::ostream& operator<<(std::ostream& os, const Delta& d)
-    {
-        auto prevFill = os.fill('0');
-        os << d.days() << " days ";
-        auto secs = d.seconds();
-        auto usecs = d.useconds();
-        if (usecs != 0)
-            os << secs << '.' << std::setw(6) << usecs << " seconds";
-        else
-            os << secs << " seconds";
-        os.fill(prevFill);
-        return os;
-    }
-
     std::optional<YearMonthDay> parseYMD(std::string_view str)
     {
         auto parts = splitString(str, '-', 2);

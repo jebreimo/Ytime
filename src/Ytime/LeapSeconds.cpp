@@ -44,7 +44,7 @@ namespace Ytime
         makeLeapSecondTuple({{1994, 7, 1}, {0, 0, 19}}, 19),
         makeLeapSecondTuple({{1996, 1, 1}, {0, 0, 20}}, 20),
         makeLeapSecondTuple({{1997, 7, 1}, {0, 0, 21}}, 21),
-        makeLeapSecondTuple({{1998, 1, 1}, {0, 0, 22}}, 22),
+        makeLeapSecondTuple({{1999, 1, 1}, {0, 0, 22}}, 22),
         makeLeapSecondTuple({{2006, 1, 1}, {0, 0, 23}}, 23),
         makeLeapSecondTuple({{2009, 1, 1}, {0, 0, 24}}, 24),
         makeLeapSecondTuple({{2012, 7, 1}, {0, 0, 25}}, 25),
