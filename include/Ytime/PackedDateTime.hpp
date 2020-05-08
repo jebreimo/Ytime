@@ -38,9 +38,9 @@ namespace Ytime
      * @brief Returns the PackedDateTime value for the given
      *      UTC date and time.
      */
-    PackedDateTime pack(const DateTime& dateTime);
+    PackedDateTime pack(const DateTime& dateTime) noexcept;
 
-    DateTime unpack(PackedDateTime dateTime);
+    DateTime unpack(PackedDateTime dateTime) noexcept;
 
     DateTimeDelta getDateTimeDelta(PackedDateTime from, PackedDateTime to);
 

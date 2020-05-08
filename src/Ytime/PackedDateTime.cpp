@@ -14,7 +14,7 @@
 
 namespace Ytime
 {
-    PackedDateTime pack(const DateTime& dateTime)
+    PackedDateTime pack(const DateTime& dateTime) noexcept
     {
         auto days = daysSinceEpochYMD(dateTime.date);
         auto usecs = usecsSinceMidnight(dateTime.time);
@@ -22,7 +22,7 @@ namespace Ytime
                               + getLeapSeconds(dateTime.date) * USECS_PER_SEC);
     }
 
-    DateTime unpack(PackedDateTime dateTime)
+    DateTime unpack(PackedDateTime dateTime) noexcept
     {
         auto leapsecs = getLeapSeconds(dateTime);
         auto secs = PackedDateTime(dateTime - leapsecs * USECS_PER_SEC);

@@ -158,11 +158,13 @@ namespace Ytime
 
     std::ostream& operator<<(std::ostream& os, const YearMonthDay& ymd)
     {
+        auto prevFlags = os.setf(std::ios::dec, std::ios::basefield);
         auto prevFill = os.fill('0');
         os << ymd.year
            << '-' << std::setw(2) << ymd.month
            << '-' << std::setw(2) << ymd.day;
         os.fill(prevFill);
+        os.flags(prevFlags);
         return os;
     }
 
@@ -207,13 +209,14 @@ namespace Ytime
 
     std::ostream& operator<<(std::ostream& os, const HourMinuteSecond& hms)
     {
+        auto prevFlags = os.setf(std::ios::dec, std::ios::basefield);
         auto prevFill = os.fill('0');
         os << std::setw(2) << hms.hour
            << ':' << std::setw(2) << hms.minute
-           << ':' << std::setw(2) << hms.second;
-        if (hms.usecond)
-            os << '.' << std::setw(6) << hms.usecond;
+           << ':' << std::setw(2) << hms.second
+           << '.' << std::setw(6) << hms.usecond;
         os.fill(prevFill);
+        os.flags(prevFlags);
         return os;
     }
 

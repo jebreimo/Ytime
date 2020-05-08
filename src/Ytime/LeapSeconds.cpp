@@ -52,7 +52,7 @@ namespace Ytime
         makeLeapSecondTuple({{2017, 1, 1}, {0, 0, 27}}, 27)
     };
 
-    uint32_t getLeapSeconds(PackedDateTime dateTime)
+    uint32_t getLeapSeconds(PackedDateTime dateTime) noexcept
     {
         using std::get;
         auto it = std::upper_bound(
@@ -64,7 +64,7 @@ namespace Ytime
         return get<2>(*prev(it));
     }
 
-    bool isLeapSecond(PackedDateTime dateTime)
+    bool isLeapSecond(PackedDateTime dateTime) noexcept
     {
         using std::get;
         auto it = std::lower_bound(
@@ -76,17 +76,17 @@ namespace Ytime
         return dateTime < get<0>(*it) && dateTime + USECS_PER_SEC >= get<0>(*it);
     }
 
-    uint32_t getLeapSeconds(DateTime dateTime)
+    uint32_t getLeapSeconds(DateTime dateTime) noexcept
     {
         return getLeapSeconds(pack(dateTime));
     }
 
-    bool isLeapSecond(DateTime dateTime)
+    bool isLeapSecond(DateTime dateTime) noexcept
     {
         return isLeapSecond(pack(dateTime));
     }
 
-    uint32_t getLeapSeconds(YearMonthDay date)
+    uint32_t getLeapSeconds(YearMonthDay date) noexcept
     {
         using std::get;
         auto it = std::upper_bound(
@@ -98,7 +98,7 @@ namespace Ytime
         return get<2>(*prev(it));
     }
 
-    bool hasLeapSecond(YearMonthDay date)
+    bool hasLeapSecond(YearMonthDay date) noexcept
     {
         using std::get;
         return std::binary_search(

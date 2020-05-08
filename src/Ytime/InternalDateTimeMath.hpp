@@ -70,7 +70,7 @@ namespace Ytime
 
     YearMonthDay toYMD(uint64_t daysSinceEpoch);
 
-    constexpr HourMinuteSecond toHMS(uint64_t useconds)
+    constexpr HourMinuteSecond toHMS(uint64_t useconds) noexcept
     {
         auto hour = std::min(uint64_t(23), useconds / (60 * 60 * USECS_PER_SEC));
         useconds -= hour * 60 * 60 * USECS_PER_SEC;
@@ -94,7 +94,7 @@ namespace Ytime
     }
 
     constexpr std::pair<uint64_t, uint64_t>
-    unpackDaysUseconds(PackedDateTime dateTime)
+    unpackDaysUseconds(PackedDateTime dateTime) noexcept
     {
         return {dateTime / USECS_PER_DAY, dateTime % USECS_PER_DAY};
     }
