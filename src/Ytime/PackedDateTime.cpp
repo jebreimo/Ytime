@@ -14,6 +14,23 @@
 
 namespace Ytime
 {
+    namespace
+    {
+        std::pair<uint64_t, uint64_t>
+        unpackDaysUsecondsUtc(PackedDateTime dateTime) noexcept
+        {
+            auto leapsecs = getLeapSeconds(dateTime);
+            auto secs = PackedDateTime(dateTime - leapsecs * USECS_PER_SEC);
+            auto dayUsecs = unpackDaysUseconds(secs);
+            if (isLeapSecond(dateTime))
+            {
+                --dayUsecs.first;
+                dayUsecs.second += USECS_PER_DAY;
+            }
+            return dayUsecs;
+        }
+    }
+
     PackedDateTime pack(const DateTime& dateTime) noexcept
     {
         auto days = daysSinceEpochYMD(dateTime.date);
@@ -24,15 +41,18 @@ namespace Ytime
 
     DateTime unpack(PackedDateTime dateTime) noexcept
     {
-        auto leapsecs = getLeapSeconds(dateTime);
-        auto secs = PackedDateTime(dateTime - leapsecs * USECS_PER_SEC);
-        auto dayUsecs = unpackDaysUseconds(secs);
-        if (isLeapSecond(dateTime))
-        {
-            --dayUsecs.first;
-            dayUsecs.second += USECS_PER_DAY;
-        }
-        return {toYMD(dayUsecs.first), toHMS(dayUsecs.second)};
+        auto daysUsecs = unpackDaysUsecondsUtc(dateTime);
+        return {toYMD(daysUsecs.first), toHMS(daysUsecs.second)};
+    }
+
+    Date unpackDate(PackedDateTime dateTime) noexcept
+    {
+        return toYMD(unpackDaysUsecondsUtc(dateTime).first);
+    }
+
+    Time unpackTime(PackedDateTime dateTime) noexcept
+    {
+        return toHMS(unpackDaysUsecondsUtc(dateTime).second);
     }
 
     DateTimeDelta getDateTimeDelta(PackedDateTime from, PackedDateTime to)

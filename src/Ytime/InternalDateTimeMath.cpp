@@ -9,7 +9,7 @@
 
 namespace Ytime
 {
-    YearMonthDay toYMD(uint64_t daysSinceEpoch)
+    Date toYMD(uint64_t daysSinceEpoch)
     {
         auto[year, dayOfYear] = toInternalYD(daysSinceEpoch);
         auto it = std::upper_bound(std::begin(ACCUMULATED_DAYS),

@@ -13,83 +13,84 @@
 
 namespace Ytime
 {
-    struct YearDay
+    struct DateYD
     {
         int year, day;
 
-        constexpr YearDay() noexcept
+        constexpr DateYD() noexcept
             : year(), day()
         {}
 
-        constexpr YearDay(int year, int day) noexcept
+        constexpr DateYD(int year, int day) noexcept
             : year(year), day(day)
         {}
     };
 
-    struct YearMonthDay
+    struct Date
     {
         int year, month, day;
 
-        constexpr YearMonthDay() noexcept
+        constexpr Date() noexcept
             : year(), month(), day()
         {}
 
-        constexpr YearMonthDay(int year, int month, int day) noexcept
+        constexpr Date(int year, int month, int day) noexcept
             : year(year), month(month), day(day)
         {}
     };
 
-    bool operator==(const YearMonthDay& a, const YearMonthDay& b);
+    bool operator==(const Date& a, const Date& b);
 
-    bool operator!=(const YearMonthDay& a, const YearMonthDay& b);
+    bool operator!=(const Date& a, const Date& b);
 
-    bool operator<(const YearMonthDay& a, const YearMonthDay& b);
+    bool operator<(const Date& a, const Date& b);
 
-    bool operator>(const YearMonthDay& a, const YearMonthDay& b);
+    bool operator>(const Date& a, const Date& b);
 
-    bool operator<=(const YearMonthDay& a, const YearMonthDay& b);
+    bool operator<=(const Date& a, const Date& b);
 
-    bool operator>=(const YearMonthDay& a, const YearMonthDay& b);
+    bool operator>=(const Date& a, const Date& b);
 
-    std::ostream& operator<<(std::ostream& os, const YearMonthDay& ymd);
+    std::ostream& operator<<(std::ostream& os, const Date& ymd);
 
-    struct HourMinuteSecond
+    struct Time
     {
         int hour, minute, second, usecond;
 
-        constexpr HourMinuteSecond() noexcept
+        constexpr Time() noexcept
             : hour(0), minute(0), second(0), usecond(0)
         {}
 
-        constexpr HourMinuteSecond(int hour, int minute, int second, int usecond = 0) noexcept
+        constexpr Time(int hour, int minute,
+                       int second, int usecond = 0) noexcept
             : hour(hour), minute(minute), second(second), usecond(usecond)
         {}
     };
 
-    bool operator==(const HourMinuteSecond& a, const HourMinuteSecond& b);
+    bool operator==(const Time& a, const Time& b);
 
-    bool operator!=(const HourMinuteSecond& a, const HourMinuteSecond& b);
+    bool operator!=(const Time& a, const Time& b);
 
-    bool operator<(const HourMinuteSecond& a, const HourMinuteSecond& b);
+    bool operator<(const Time& a, const Time& b);
 
-    bool operator>(const HourMinuteSecond& a, const HourMinuteSecond& b);
+    bool operator>(const Time& a, const Time& b);
 
-    bool operator<=(const HourMinuteSecond& a, const HourMinuteSecond& b);
+    bool operator<=(const Time& a, const Time& b);
 
-    bool operator>=(const HourMinuteSecond& a, const HourMinuteSecond& b);
+    bool operator>=(const Time& a, const Time& b);
 
-    std::ostream& operator<<(std::ostream& os, const HourMinuteSecond& hms);
+    std::ostream& operator<<(std::ostream& os, const Time& hms);
 
     struct DateTime
     {
-        YearMonthDay date;
-        HourMinuteSecond time;
+        Date date;
+        Time time;
 
         constexpr DateTime() noexcept
             : date(), time()
         {}
 
-        constexpr DateTime(YearMonthDay date, HourMinuteSecond time) noexcept
+        constexpr DateTime(Date date, Time time) noexcept
             : date(date.year, date.month, date.day),
               time(time.hour, time.minute, time.second, time.usecond)
         {}
@@ -109,9 +110,9 @@ namespace Ytime
 
     std::ostream& operator<<(std::ostream& os, const DateTime& dt);
 
-    std::optional<YearMonthDay> parseYMD(std::string_view str);
+    std::optional<Date> parseYMD(std::string_view str);
 
-    std::optional<HourMinuteSecond> parseHMS(std::string_view str);
+    std::optional<Time> parseHMS(std::string_view str);
 
     std::optional<DateTime> parseDateTime(std::string_view str);
 
@@ -119,7 +120,7 @@ namespace Ytime
 
     DateTime getCurrentDateTime();
 
-    YearDay toYearDay(const YearMonthDay& date);
+    DateYD toYearDay(const Date& date);
 
-    YearMonthDay toYearMonthDay(const YearDay& date);
+    Date toYearMonthDay(const DateYD& date);
 }

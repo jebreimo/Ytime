@@ -85,7 +85,7 @@ namespace Ytime
             return isLeapYear(year) ? 29 : 28;
         }
 
-        std::string validateDate(const YearMonthDay& date)
+        std::string validateDate(const Date& date)
         {
             if (date.year < MIN_YEAR)
                 return "Year must be at least " + std::to_string(MIN_YEAR);
@@ -99,8 +99,8 @@ namespace Ytime
             return {};
         }
 
-        std::string validateTime(const YearMonthDay& date,
-                                 const HourMinuteSecond& time)
+        std::string validateTime(const Date& date,
+                                 const Time& time)
         {
             if (time.hour < 0 || 23 < time.hour)
                 return "Hour must be between 0 and 23.";
@@ -122,17 +122,17 @@ namespace Ytime
         }
     }
 
-    bool operator==(const YearMonthDay& a, const YearMonthDay& b)
+    bool operator==(const Date& a, const Date& b)
     {
         return a.year == b.year && a.month == b.month && a.day == b.day;
     }
 
-    bool operator!=(const YearMonthDay& a, const YearMonthDay& b)
+    bool operator!=(const Date& a, const Date& b)
     {
         return !(a == b);
     }
 
-    bool operator<(const YearMonthDay& a, const YearMonthDay& b)
+    bool operator<(const Date& a, const Date& b)
     {
         if (a.year != b.year)
             return a.year < b.year;
@@ -141,22 +141,22 @@ namespace Ytime
         return a.day < b.day;
     }
 
-    bool operator>(const YearMonthDay& a, const YearMonthDay& b)
+    bool operator>(const Date& a, const Date& b)
     {
         return b < a;
     }
 
-    bool operator<=(const YearMonthDay& a, const YearMonthDay& b)
+    bool operator<=(const Date& a, const Date& b)
     {
         return !(b < a);
     }
 
-    bool operator>=(const YearMonthDay& a, const YearMonthDay& b)
+    bool operator>=(const Date& a, const Date& b)
     {
         return !(a < b);
     }
 
-    std::ostream& operator<<(std::ostream& os, const YearMonthDay& ymd)
+    std::ostream& operator<<(std::ostream& os, const Date& ymd)
     {
         auto prevFlags = os.setf(std::ios::dec, std::ios::basefield);
         auto prevFill = os.fill('0');
@@ -168,7 +168,7 @@ namespace Ytime
         return os;
     }
 
-    bool operator==(const HourMinuteSecond& a, const HourMinuteSecond& b)
+    bool operator==(const Time& a, const Time& b)
     {
         return a.hour == b.hour
                && a.minute == b.minute
@@ -176,12 +176,12 @@ namespace Ytime
                && a.usecond == b.usecond;
     }
 
-    bool operator!=(const HourMinuteSecond& a, const HourMinuteSecond& b)
+    bool operator!=(const Time& a, const Time& b)
     {
         return !(a == b);
     }
 
-    bool operator<(const HourMinuteSecond& a, const HourMinuteSecond& b)
+    bool operator<(const Time& a, const Time& b)
     {
         if (a.hour != b.hour)
             return a.hour < b.hour;
@@ -192,22 +192,22 @@ namespace Ytime
         return a.usecond < b.usecond;
     }
 
-    bool operator>(const HourMinuteSecond& a, const HourMinuteSecond& b)
+    bool operator>(const Time& a, const Time& b)
     {
         return b < a;
     }
 
-    bool operator<=(const HourMinuteSecond& a, const HourMinuteSecond& b)
+    bool operator<=(const Time& a, const Time& b)
     {
         return !(b < a);
     }
 
-    bool operator>=(const HourMinuteSecond& a, const HourMinuteSecond& b)
+    bool operator>=(const Time& a, const Time& b)
     {
         return !(a < b);
     }
 
-    std::ostream& operator<<(std::ostream& os, const HourMinuteSecond& hms)
+    std::ostream& operator<<(std::ostream& os, const Time& hms)
     {
         auto prevFlags = os.setf(std::ios::dec, std::ios::basefield);
         auto prevFill = os.fill('0');
@@ -257,7 +257,7 @@ namespace Ytime
         return os << dt.date << "T" << dt.time;
     }
 
-    std::optional<YearMonthDay> parseYMD(std::string_view str)
+    std::optional<Date> parseYMD(std::string_view str)
     {
         auto parts = splitString(str, '-', 2);
         if (parts.size() != 3)
@@ -266,11 +266,11 @@ namespace Ytime
         auto m = parseLong(std::string(parts[1]));
         auto d = parseLong(std::string(parts[2]));
         if (y && m && d)
-            return YearMonthDay(*y, *m, *d);
+            return Date(*y, *m, *d);
         return {};
     }
 
-    std::optional<HourMinuteSecond> parseHMS(std::string_view str)
+    std::optional<Time> parseHMS(std::string_view str)
     {
         auto parts1 = splitString(str, '.', 1);
         auto parts2 = splitString(parts1[0].substr(), ':', 2);
@@ -284,7 +284,7 @@ namespace Ytime
                  : std::optional<long>(0);
 
         if (h && m && s && u)
-            return HourMinuteSecond(int(*h), int(*m), int(*s), int(*u));
+            return Time(int(*h), int(*m), int(*s), int(*u));
         return {};
     }
 
@@ -330,14 +330,14 @@ namespace Ytime
                 {gt->tm_hour, gt->tm_min, gt->tm_sec}};
     }
 
-    YearDay toYearDay(const YearMonthDay& date)
+    DateYD toYearDay(const Date& date)
     {
-        YearMonthDay date0 = {date.year, 1, 1};
+        Date date0 = {date.year, 1, 1};
         auto day = daysSinceEpochYMD(date) - daysSinceEpochYMD(date0);
         return {date.year, int(day + 1)};
     }
 
-    YearMonthDay toYearMonthDay(const YearDay& date)
+    Date toYearMonthDay(const DateYD& date)
     {
         return toYMD(daysSinceEpochYMD({date.year, 1, 1}) + date.day - 1);
     }

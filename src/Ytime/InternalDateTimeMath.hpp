@@ -26,7 +26,7 @@ namespace Ytime
         return years * 365 + years / 4 - years / 100 + years / 400;
     }
 
-    constexpr uint32_t daysSinceEpochYMD(YearMonthDay date) noexcept
+    constexpr uint32_t daysSinceEpochYMD(Date date) noexcept
     {
         /* Make March the first month of the year. */
         if (date.month > 2)
@@ -68,9 +68,9 @@ namespace Ytime
         return {year, daysSinceEpoch - n * 365};
     }
 
-    YearMonthDay toYMD(uint64_t daysSinceEpoch);
+    Date toYMD(uint64_t daysSinceEpoch);
 
-    constexpr HourMinuteSecond toHMS(uint64_t useconds) noexcept
+    constexpr Time toHMS(uint64_t useconds) noexcept
     {
         auto hour = std::min(uint64_t(23), useconds / (60 * 60 * USECS_PER_SEC));
         useconds -= hour * 60 * 60 * USECS_PER_SEC;
@@ -81,7 +81,7 @@ namespace Ytime
         return {int(hour), int(minute), int(second), int(usecond)};
     }
 
-    constexpr uint64_t usecsSinceMidnight(HourMinuteSecond time) noexcept
+    constexpr uint64_t usecsSinceMidnight(Time time) noexcept
     {
         return time.hour * USECS_PER_HOUR + time.minute * USECS_PER_MIN
                + time.second * USECS_PER_SEC + time.usecond;

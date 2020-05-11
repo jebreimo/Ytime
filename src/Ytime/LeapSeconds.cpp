@@ -86,7 +86,7 @@ namespace Ytime
         return isLeapSecond(pack(dateTime));
     }
 
-    uint32_t getLeapSeconds(YearMonthDay date) noexcept
+    uint32_t getLeapSeconds(Date date) noexcept
     {
         using std::get;
         auto it = std::upper_bound(
@@ -98,7 +98,7 @@ namespace Ytime
         return get<2>(*prev(it));
     }
 
-    bool hasLeapSecond(YearMonthDay date) noexcept
+    bool hasLeapSecond(Date date) noexcept
     {
         using std::get;
         return std::binary_search(

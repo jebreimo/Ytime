@@ -42,6 +42,10 @@ namespace Ytime
 
     DateTime unpack(PackedDateTime dateTime) noexcept;
 
+    Date unpackDate(PackedDateTime dateTime) noexcept;
+
+    Time unpackTime(PackedDateTime dateTime) noexcept;
+
     DateTimeDelta getDateTimeDelta(PackedDateTime from, PackedDateTime to);
 
     PackedDateTime add(PackedDateTime from, DateTimeDelta delta);

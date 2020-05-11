@@ -18,7 +18,7 @@ namespace Ytime
 
     bool isLeapSecond(DateTime dateTime) noexcept;
 
-    uint32_t getLeapSeconds(YearMonthDay date) noexcept;
+    uint32_t getLeapSeconds(Date date) noexcept;
 
-    bool hasLeapSecond(YearMonthDay date) noexcept;
+    bool hasLeapSecond(Date date) noexcept;
 }
