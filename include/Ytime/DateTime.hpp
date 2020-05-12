@@ -110,11 +110,15 @@ namespace Ytime
 
     std::ostream& operator<<(std::ostream& os, const DateTime& dt);
 
-    std::optional<Date> parseYMD(std::string_view str);
+    std::optional<Date> parseDate(std::string_view str);
 
-    std::optional<Time> parseHMS(std::string_view str);
+    std::optional<Time> parseTime(std::string_view str);
 
     std::optional<DateTime> parseDateTime(std::string_view str);
+
+    std::string validate(const Date& date);
+
+    std::string validate(const Time& time, bool allowLeapSecond = false);
 
     std::string validate(const DateTime& dateTime);
 

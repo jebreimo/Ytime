@@ -84,42 +84,6 @@ namespace Ytime
                 return DAYS[month - 1];
             return isLeapYear(year) ? 29 : 28;
         }
-
-        std::string validateDate(const Date& date)
-        {
-            if (date.year < MIN_YEAR)
-                return "Year must be at least " + std::to_string(MIN_YEAR);
-            auto daysInMonth = getDaysInMonth(date.year, date.month);
-
-            if (daysInMonth == 0)
-                return "Month must be between 1 and 12.";
-            if (date.day < 1 || daysInMonth < date.day)
-                return "Day must be between 1 and "
-                       + std::to_string(daysInMonth) + ".";
-            return {};
-        }
-
-        std::string validateTime(const Date& date,
-                                 const Time& time)
-        {
-            if (time.hour < 0 || 23 < time.hour)
-                return "Hour must be between 0 and 23.";
-            if (time.minute < 0 || 59 < time.minute)
-                return "Minute must be between 0 and 59.";
-            if (time.usecond < 0 || 1000000 <= time.usecond)
-                return "Microsecond must be between 0 and 999999.";
-            if (0 <= time.second && time.second <= 59)
-                return {};
-
-            if (time.hour != 23 || time.minute != 59)
-                return "Second must be between 0 and 59.";
-
-            auto maxSeconds = 59 + (hasLeapSecond(date) ? 1 : 0);
-            if (time.second != maxSeconds)
-                return "Second must be between 1 and "
-                       + std::to_string(maxSeconds) + ".";
-            return {};
-        }
     }
 
     bool operator==(const Date& a, const Date& b)
@@ -257,7 +221,7 @@ namespace Ytime
         return os << dt.date << "T" << dt.time;
     }
 
-    std::optional<Date> parseYMD(std::string_view str)
+    std::optional<Date> parseDate(std::string_view str)
     {
         auto parts = splitString(str, '-', 2);
         if (parts.size() != 3)
@@ -270,7 +234,7 @@ namespace Ytime
         return {};
     }
 
-    std::optional<Time> parseHMS(std::string_view str)
+    std::optional<Time> parseTime(std::string_view str)
     {
         auto parts1 = splitString(str, '.', 1);
         auto parts2 = splitString(parts1[0].substr(), ':', 2);
@@ -293,33 +257,68 @@ namespace Ytime
         auto t = str.find('T');
         if (t != std::string_view::npos)
         {
-            auto ymd = parseYMD(str.substr(0, t));
-            auto hms = parseHMS(str.substr(t + 1));
+            auto ymd = parseDate(str.substr(0, t));
+            auto hms = parseTime(str.substr(t + 1));
             if (ymd && hms)
                 return DateTime(*ymd, *hms);
             return {};
         }
         else if (str.find('-') != std::string_view::npos)
         {
-            auto ymd = parseYMD(str);
+            auto ymd = parseDate(str);
             if (ymd)
                 return DateTime(*ymd, {});
             return {};
         }
         else
         {
-            auto hms = parseHMS(str);
+            auto hms = parseTime(str);
             if (hms)
                 return DateTime({}, *hms);
             return {};
         }
     }
 
+    std::string validate(const Date& date)
+    {
+        if (date.year < MIN_YEAR)
+            return "Year must be at least " + std::to_string(MIN_YEAR);
+        auto daysInMonth = getDaysInMonth(date.year, date.month);
+
+        if (daysInMonth == 0)
+            return "Month must be between 1 and 12.";
+        if (date.day < 1 || daysInMonth < date.day)
+            return "Day must be between 1 and "
+                   + std::to_string(daysInMonth) + ".";
+        return {};
+    }
+
+    std::string validate(const Time& time, bool allowLeapSecond)
+    {
+        if (time.hour < 0 || 23 < time.hour)
+            return "Hour must be between 0 and 23.";
+        if (time.minute < 0 || 59 < time.minute)
+            return "Minute must be between 0 and 59.";
+        if (time.usecond < 0 || 1000000 <= time.usecond)
+            return "Microsecond must be between 0 and 999999.";
+        if (0 <= time.second && time.second <= 59)
+            return {};
+
+        if (time.hour != 23 || time.minute != 59)
+            return "Second must be between 0 and 59.";
+
+        auto maxSeconds = 59 + (allowLeapSecond ? 1 : 0);
+        if (time.second != maxSeconds)
+            return "Second must be between 1 and "
+                   + std::to_string(maxSeconds) + ".";
+        return {};
+    }
+
     std::string validate(const DateTime& dateTime)
     {
-        if (auto error = validateDate(dateTime.date); !error.empty())
+        if (auto error = validate(dateTime.date); !error.empty())
             return error;
-        return validateTime(dateTime.date, dateTime.time);
+        return validate(dateTime.time, hasLeapSecond(dateTime.date));
     }
 
     DateTime getCurrentDateTime()
