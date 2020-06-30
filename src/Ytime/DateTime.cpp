@@ -281,7 +281,7 @@ namespace Ytime
 
     std::string validate(const Date& date)
     {
-        if (date.year < MIN_YEAR)
+        if (date.year < int(MIN_YEAR))
             return "Year must be at least " + std::to_string(MIN_YEAR);
         auto daysInMonth = getDaysInMonth(date.year, date.month);
 
