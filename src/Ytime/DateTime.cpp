@@ -237,7 +237,7 @@ namespace Ytime
     std::optional<Time> parseTime(std::string_view str)
     {
         auto parts1 = splitString(str, '.', 1);
-        auto parts2 = splitString(parts1[0].substr(), ':', 2);
+        auto parts2 = splitString(parts1[0], ':', 2);
         if (parts2.size() != 3)
             return {};
         auto h = parseLong(std::string(parts2[0]));
